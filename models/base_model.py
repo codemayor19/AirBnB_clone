@@ -2,6 +2,7 @@
 
 from uuid import uuid4
 from datetime import datetime
+import models
 
 class BaseModel:
     """BaseModel for creating and managing instances"""
@@ -9,6 +10,10 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """initialize an instance of the basemodel"""
         time_format = "%Y-%m-%dT%H:%M:%S.%f"
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.utcnow()
+        self.updated_at = datetime.utcnow()
+
         if kwargs:
             for key, value in kwargs.items():
                 if key == "__class__":
@@ -17,10 +22,7 @@ class BaseModel:
                     setattr(self, key, datetime.strptime(value, time_format))
                 else:
                     setattr(self, key, value)
-        else:
-            self.id = str(uuid4())
-            self.created_at = datetime.utcnow()
-            self.updated_at = datetime.utcnow()
+        models.storage.new(self)
 
     def to_dict(self):
         """to_dict"""
@@ -34,6 +36,7 @@ class BaseModel:
     def save(self):
         """save"""
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def __str__(self):
         """str"""
