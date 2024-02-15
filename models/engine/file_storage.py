@@ -8,6 +8,7 @@ from models.review import Review
 from models.state import State
 from models.city import City
 
+
 class FileStorage:
     """File storage"""
     __file_path = "file.json"
@@ -45,4 +46,3 @@ class FileStorage:
                         FileStorage.__objects[key] = instance
                 except Exception:
                     pass
-                        
